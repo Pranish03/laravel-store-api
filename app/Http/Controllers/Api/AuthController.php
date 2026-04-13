@@ -18,8 +18,8 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => strtolower($validated['email']),
+            'name'     => $validated['name'],
+            'email'    => strtolower($validated['email']),
             'password' => Hash::make($validated['password'])
         ]);
 
@@ -28,8 +28,8 @@ class AuthController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Registered successfully.',
-            'token' => $token,
-            'user' => new UserResource($user)
+            'token'   => $token,
+            'data'    => new UserResource($user)
         ], 201);
     }
 
@@ -37,31 +37,41 @@ class AuthController extends Controller
     {
         $validated = $request->validated();
 
-        if (! Auth::attempt($validated)) {
+        if (!Auth::attempt($validated)) {
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid credentials.',
             ], 401);
         }
 
-        $user = Auth::user();
+        $user  = Auth::user();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'success' => true,
-            'message' => 'Loggedin successfully.',
-            'token' => $token,
-            'user' => new UserResource($user)
+            'message' => 'Logged in successfully.',
+            'token'   => $token,
+            'data'    => new UserResource($user)
         ], 200);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        $token = $request->user()->currentAccessToken();
+        $token->delete();
 
         return response()->json([
             'success' => true,
-            'message' => 'Logged out successfully'
+            'message' => 'Logged out successfully.'
+        ]);
+    }
+
+    public function me(Request $request)
+    {
+        return response()->json([
+            'success' => true,
+            'data'    => new UserResource($request->user())
         ]);
     }
 }
