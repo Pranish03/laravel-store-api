@@ -24,7 +24,7 @@ class AuthController extends Controller
             'success' => true,
             'message' => 'Registered successfully',
             'user' => $user->only(['id', 'name', 'email'])
-        ], 201);
+        ]);
     }
 
 
