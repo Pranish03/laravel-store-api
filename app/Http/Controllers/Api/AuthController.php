@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -26,7 +27,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Registered successfully',
+            'message' => 'Registered successfully.',
             'token' => $token,
             'user' => new UserResource($user)
         ], 201);
@@ -39,7 +40,7 @@ class AuthController extends Controller
         if (! Auth::attempt($validated)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid credentials',
+                'message' => 'Invalid credentials.',
             ], 401);
         }
 
@@ -48,9 +49,19 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Loggedin successfully',
+            'message' => 'Loggedin successfully.',
             'token' => $token,
             'user' => new UserResource($user)
         ], 200);
+    }
+
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Logged out successfully'
+        ]);
     }
 }
