@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable(['user_id', 'shop_name', 'address', 'phone_number', 'status'])]
+#[Fillable(['user_id', 'shop_name', 'email', 'address', 'phone_number', 'status'])]
 
 class VendorProfile extends Model
 {

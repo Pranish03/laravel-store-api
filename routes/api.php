@@ -15,5 +15,5 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('vendor')->group(function () {
-    Route::post('/request', [VendorController::class, 'requestVendor']);
+    Route::post('/request', [VendorController::class, 'store']);
 });
