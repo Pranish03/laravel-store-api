@@ -16,4 +16,8 @@ Route::prefix('auth')->group(function () {
 
 Route::prefix('vendor')->group(function () {
     Route::post('/request', [VendorController::class, 'store']);
+
+    Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+        Route::patch('/{id}/approve', [VendorController::class, 'approve']);
+    });
 });
